@@ -1,0 +1,266 @@
+{
+  "selection_policy": "STVR external validation: 5-6 real open-source Python projects, 80-100 public top-level functions, max 16 functions per project. Prefer documented public functions and skip private/test modules, generated files, and functions whose executable fixture would require later local helpers.",
+  "total_min_tasks": 80,
+  "total_max_tasks": 96,
+  "projects": [
+    {
+      "project": "humanize",
+      "repo_url": "https://github.com/python-humanize/humanize.git",
+      "ref": "976484a",
+      "project_src": "humanize/src",
+      "include_globs": [
+        "humanize/*.py"
+      ],
+      "exclude_globs": [
+        "**/__init__.py",
+        "**/_*.py",
+        "**/tests/**"
+      ],
+      "max_functions": 16,
+      "preferred_targets": [
+        {
+          "module": "humanize.filesize",
+          "rel_path": "humanize/filesize.py",
+          "function": "naturalsize"
+        },
+        {
+          "module": "humanize.lists",
+          "rel_path": "humanize/lists.py",
+          "function": "natural_list"
+        },
+        {
+          "module": "humanize.number",
+          "rel_path": "humanize/number.py",
+          "function": "ordinal"
+        },
+        {
+          "module": "humanize.number",
+          "rel_path": "humanize/number.py",
+          "function": "intcomma"
+        },
+        {
+          "module": "humanize.number",
+          "rel_path": "humanize/number.py",
+          "function": "intword"
+        },
+        {
+          "module": "humanize.number",
+          "rel_path": "humanize/number.py",
+          "function": "apnumber"
+        },
+        {
+          "module": "humanize.number",
+          "rel_path": "humanize/number.py",
+          "function": "fractional"
+        },
+        {
+          "module": "humanize.number",
+          "rel_path": "humanize/number.py",
+          "function": "scientific"
+        },
+        {
+          "module": "humanize.number",
+          "rel_path": "humanize/number.py",
+          "function": "clamp"
+        },
+        {
+          "module": "humanize.number",
+          "rel_path": "humanize/number.py",
+          "function": "metric"
+        },
+        {
+          "module": "humanize.time",
+          "rel_path": "humanize/time.py",
+          "function": "naturaldelta"
+        },
+        {
+          "module": "humanize.time",
+          "rel_path": "humanize/time.py",
+          "function": "precisedelta"
+        }
+      ]
+    },
+    {
+      "project": "packaging",
+      "repo_url": "https://github.com/pypa/packaging.git",
+      "ref": "0726512",
+      "project_src": "packaging/src",
+      "include_globs": [
+        "packaging/*.py"
+      ],
+      "exclude_globs": [
+        "**/__init__.py",
+        "**/_*.py",
+        "**/tests/**"
+      ],
+      "max_functions": 16,
+      "preferred_targets": [
+        {
+          "module": "packaging.utils",
+          "rel_path": "packaging/utils.py",
+          "function": "canonicalize_name"
+        },
+        {
+          "module": "packaging.utils",
+          "rel_path": "packaging/utils.py",
+          "function": "is_normalized_name"
+        },
+        {
+          "module": "packaging.utils",
+          "rel_path": "packaging/utils.py",
+          "function": "canonicalize_version"
+        },
+        {
+          "module": "packaging.utils",
+          "rel_path": "packaging/utils.py",
+          "function": "parse_wheel_filename"
+        },
+        {
+          "module": "packaging.utils",
+          "rel_path": "packaging/utils.py",
+          "function": "parse_sdist_filename"
+        },
+        {
+          "module": "packaging.tags",
+          "rel_path": "packaging/tags.py",
+          "function": "parse_tag"
+        },
+        {
+          "module": "packaging.tags",
+          "rel_path": "packaging/tags.py",
+          "function": "interpreter_name"
+        },
+        {
+          "module": "packaging.tags",
+          "rel_path": "packaging/tags.py",
+          "function": "interpreter_version"
+        },
+        {
+          "module": "packaging.markers",
+          "rel_path": "packaging/markers.py",
+          "function": "default_environment"
+        },
+        {
+          "module": "packaging.pylock",
+          "rel_path": "packaging/pylock.py",
+          "function": "is_valid_pylock_path"
+        }
+      ]
+    },
+    {
+      "project": "click",
+      "repo_url": "https://github.com/pallets/click.git",
+      "ref": "8a1b1a3",
+      "project_src": "click/src",
+      "include_globs": [
+        "click/parser.py",
+        "click/termui.py",
+        "click/types.py",
+        "click/utils.py"
+      ],
+      "exclude_globs": [
+        "**/__init__.py",
+        "**/_*.py"
+      ],
+      "max_functions": 16,
+      "preferred_targets": []
+    },
+    {
+      "project": "more-itertools",
+      "repo_url": "https://github.com/more-itertools/more-itertools.git",
+      "ref": "4a55f8d",
+      "project_src": "more-itertools",
+      "include_globs": [
+        "more_itertools/*.py"
+      ],
+      "exclude_globs": [
+        "**/__init__.py",
+        "**/_*.py",
+        "**/tests/**"
+      ],
+      "max_functions": 16,
+      "preferred_targets": []
+    },
+    {
+      "project": "boltons",
+      "repo_url": "https://github.com/mahmoud/boltons.git",
+      "ref": "979fa9b",
+      "project_src": "boltons",
+      "include_globs": [
+        "boltons/fileutils.py",
+        "boltons/formatutils.py",
+        "boltons/iterutils.py",
+        "boltons/mathutils.py",
+        "boltons/strutils.py",
+        "boltons/timeutils.py",
+        "boltons/typeutils.py",
+        "boltons/urlutils.py"
+      ],
+      "exclude_globs": [
+        "**/__init__.py",
+        "**/_*.py",
+        "**/tests/**"
+      ],
+      "max_functions": 16,
+      "preferred_targets": []
+    },
+    {
+      "project": "python-dateutil",
+      "repo_url": "https://github.com/dateutil/dateutil.git",
+      "ref": "48bd1af",
+      "project_src": "python-dateutil/src",
+      "include_globs": [
+        "dateutil/**/*.py"
+      ],
+      "exclude_globs": [
+        "**/__init__.py",
+        "dateutil/zoneinfo/**",
+        "dateutil/tz/win.py",
+        "dateutil/tzwin.py"
+      ],
+      "max_functions": 16,
+      "preferred_targets": [
+        {
+          "module": "dateutil.easter",
+          "rel_path": "dateutil/easter.py",
+          "function": "easter"
+        },
+        {
+          "module": "dateutil.parser._parser",
+          "rel_path": "dateutil/parser/_parser.py",
+          "function": "parse"
+        },
+        {
+          "module": "dateutil.tz.tz",
+          "rel_path": "dateutil/tz/tz.py",
+          "function": "datetime_exists"
+        },
+        {
+          "module": "dateutil.tz.tz",
+          "rel_path": "dateutil/tz/tz.py",
+          "function": "datetime_ambiguous"
+        },
+        {
+          "module": "dateutil.tz.tz",
+          "rel_path": "dateutil/tz/tz.py",
+          "function": "resolve_imaginary"
+        },
+        {
+          "module": "dateutil.utils",
+          "rel_path": "dateutil/utils.py",
+          "function": "today"
+        },
+        {
+          "module": "dateutil.utils",
+          "rel_path": "dateutil/utils.py",
+          "function": "default_tzinfo"
+        },
+        {
+          "module": "dateutil.utils",
+          "rel_path": "dateutil/utils.py",
+          "function": "within_delta"
+        }
+      ]
+    }
+  ]
+}

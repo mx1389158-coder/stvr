@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-store">
+    <meta http-equiv="Pragma" content="no-cache">
+    <title>STVR 代码测试质量管理系统</title>
+    <link rel="stylesheet" href="./styles.css?v=20260731c">
+  </head>
+  <body>
+    <section class="login" id="login">
+      <div class="login-shell">
+        <div class="login-brand">
+          <div class="logo large mark" aria-label="STVR"><img src="./logo.jpg" alt="" onerror="this.remove()"><span>S</span></div>
+          <h1>STVR</h1>
+          <p>Software Test Verification and Repair</p>
+        </div>
+        <form class="login-card" id="loginForm">
+          <div class="auth-tabs" role="tablist" aria-label="登录方式">
+            <button class="active" id="loginTab" type="button">登录</button>
+            <button id="registerTab" type="button">注册</button>
+          </div>
+          <h2 id="authTitle">用户登录</h2>
+          <label>账号<input id="userName" type="text" value="demo" autocomplete="username"></label>
+          <label>密码<input id="password" type="password" value="demo123" autocomplete="current-password"></label>
+          <label class="confirm-row hidden">确认密码<input id="confirmPassword" type="password" autocomplete="new-password"></label>
+          <label class="role-row hidden">角色<select id="userRole"><option>开发者</option><option>测试工程师</option></select></label>
+          <button class="primary" id="authSubmit" type="submit">登录</button>
+        </form>
+      </div>
+    </section>
+
+    <div class="app locked" id="app">
+      <aside class="rail">
+        <div class="brand">
+          <div class="logo mark" aria-label="STVR"><img src="./logo.jpg" alt="" onerror="this.remove()"><span>S</span></div>
+          <div>
+            <strong>STVR</strong>
+            <span>Quality Platform</span>
+          </div>
+        </div>
+        <nav class="nav" aria-label="主导航">
+          <button class="nav-btn active" data-view="run" title="控制台"><span>⌘</span>控制台</button>
+          <button class="nav-btn" data-view="data" title="数据资产"><span>▦</span>数据资产</button>
+          <button class="nav-btn" data-view="model" title="模型配置"><span>◈</span>模型配置</button>
+          <button class="nav-btn" data-view="batch" title="批量评估"><span>▧</span>批量评估</button>
+          <button class="nav-btn" data-view="audit" title="质量审计"><span>◇</span>质量审计</button>
+          <button class="nav-btn" data-view="history" title="历史记录"><span>▤</span>历史记录</button>
+          <button class="nav-btn" data-view="report" title="报告"><span>▣</span>报告</button>
+          <button class="nav-btn" data-view="users" title="用户管理"><span>▥</span>用户管理</button>
+        </nav>
+        <div class="rail-footer">
+          <div class="rail-user">
+            <span id="railUser">demo</span>
+            <small id="railRole">开发者</small>
+          </div>
+          <button class="logout" id="logoutButton" type="button">退出登录</button>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="header">
+          <div>
+            <p class="eyebrow">质量运营</p>
+            <h1>代码测试质量管理系统</h1>
+          </div>
+          <div class="header-actions">
+            <select class="sample-select" id="sampleSelect" aria-label="载入示例">
+              <option value="">载入示例</option>
+            </select>
+            <button class="ghost" id="exportButton" title="导出报告">导出报告</button>
+            <span class="userchip" id="userChip">demo</span>
+            <button class="primary" id="runButton" title="开始评估">开始评估</button>
+          </div>
+        </header>
+
+        <section class="view active" id="run">
+          <section class="projectdash" id="projectDash"></section>
+          <div class="run-grid">
+            <section class="panel editor-panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">代码输入</p>
+                  <h2>单函数评估</h2>
+                </div>
+              </div>
+              <textarea id="sourceCode" spellcheck="false"></textarea>
+              <div class="uploadbar">
+                <select class="function-picker" id="functionSelect" aria-label="选择目标函数"></select>
+                <select id="frameworkSelect" aria-label="选择测试框架">
+                  <option value="pytest">pytest</option>
+                  <option value="unittest">unittest</option>
+                </select>
+                <select id="engineSelect" aria-label="选择生成引擎">
+                  <option value="auto">自动引擎</option>
+                  <option value="llm">真实大模型</option>
+                  <option value="off">沙箱生成</option>
+                </select>
+              </div>
+              <div class="settings">
+                <label>
+                  <span>测试用例数 <b id="candidateValue">6</b></span>
+                  <input id="candidateCount" type="range" min="3" max="12" value="6">
+                </label>
+                <label>
+                  <span>评估严格度 <b id="verifyValue">3</b></span>
+                  <input id="verifyLevel" type="range" min="1" max="4" value="3">
+                </label>
+              </div>
+              <div class="inspector" id="inspector"></div>
+            </section>
+
+            <section class="panel flow-panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">可信闭环</p>
+                  <h2>可信测试流程</h2>
+                </div>
+                <span class="pill" id="runState">待评估</span>
+              </div>
+              <div class="runprogress hidden" id="runProgress">
+                <div class="runprogress-head">
+                  <b id="progressStage">准备评估</b>
+                  <span id="progressEta">预计剩余 --</span>
+                </div>
+                <div class="progress-track" id="progressTrack" role="progressbar" aria-label="评估进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="progressFill"></i></div>
+                <div class="runprogress-meta"><span id="progressPercent">0%</span><span id="progressElapsed">已用 0 秒</span></div>
+              </div>
+              <div class="flow" id="flow"></div>
+              <div class="result-summary" id="runtime"></div>
+            </section>
+          </div>
+          <div class="analysis-grid">
+            <section class="panel diagnosis-panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow" id="detailEyebrow">缺陷诊断</p>
+                  <h2 id="selectedName">暂无评估结果</h2>
+                </div>
+                <span class="score" id="selectedScore">-</span>
+              </div>
+              <pre><code id="selectedCode"></code></pre>
+              <div class="diagnosis" id="diagnosis"></div>
+            </section>
+
+            <section class="panel repair-panel" id="repairBox">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">修复推荐</p>
+                  <h2>改进测试</h2>
+                </div>
+                <span class="pill" id="repairState">待生成</span>
+              </div>
+              <pre><code id="repairCode"></code></pre>
+              <div class="actionbar">
+                <button class="primary" id="downloadTest">下载测试</button>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="data">
+          <div class="data-grid">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">数据概览</p>
+                  <h2>真实数据资产</h2>
+                </div>
+              </div>
+              <div class="assetcards" id="assetCards"></div>
+              <div class="funnel" id="funnel"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">外部验证</p>
+                  <h2>外部样例验证</h2>
+                </div>
+              </div>
+              <canvas id="externalCanvas" width="720" height="360" aria-label="外部验证图表"></canvas>
+              <div class="table compact" id="projectBreakdown"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="model">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">模型配置</p>
+                <h2>模型策略</h2>
+              </div>
+              <div class="header-actions">
+                <button class="ghost" id="warmModel" type="button">预热模型</button>
+                <button class="ghost" id="releaseModel" type="button">释放显存</button>
+                <select id="tableMode" aria-label="选择对比表">
+                  <option value="controls">归因控制</option>
+                  <option value="factorial">因子实验</option>
+                </select>
+              </div>
+            </div>
+            <div class="modelstatus" id="modelStatus"></div>
+            <div class="table" id="modelTable"></div>
+          </section>
+        </section>
+
+        <section class="view" id="batch">
+          <div class="batch-grid">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">批量评估</p>
+                  <h2>Python 项目导入</h2>
+                </div>
+                <button class="primary" id="runBatch">运行批量评估</button>
+              </div>
+              <div class="batchimport">
+                <label class="filepick" title="选择一个或多个 .py 文件">Python 文件<input id="projectFiles" type="file" accept=".py" multiple></label>
+                <label class="filepick" title="选择项目根文件夹，将读取其中全部 .py 文件">完整项目<input id="projectFolder" type="file" accept=".py" webkitdirectory directory multiple></label>
+                <label class="filepick" title="选择包含 Python 源码的项目 ZIP">项目 ZIP<input id="archiveFile" type="file" accept=".zip"></label>
+                <button class="ghost hidden" id="clearBatch" type="button">清除</button>
+              </div>
+              <div class="importstate" id="batchImportState">
+                <b>选择待评估代码</b>
+                <span>单个 .py、完整项目或项目 ZIP</span>
+              </div>
+              <div class="batchbar">
+                <select id="batchFramework" aria-label="批量测试框架"><option value="pytest">pytest</option><option value="unittest">unittest</option></select>
+                <select id="batchEngine" aria-label="批量生成引擎"><option value="off">沙箱生成</option><option value="auto">自动引擎</option><option value="llm">真实大模型</option></select>
+                <select id="batchLimit" aria-label="批量数量"><option value="6">6 个函数</option><option value="12">12 个函数</option><option value="24">24 个函数</option></select>
+                <span id="batchState">尚未扫描</span>
+              </div>
+              <div class="table batchtargets" id="batchTargets"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">批量报告</p>
+                  <h2>评估结果</h2>
+                </div>
+                <span class="pill" id="batchSummary">未运行</span>
+              </div>
+              <div class="batchresults" id="batchResults"></div>
+            </section>
+          </div>
+        </section>
+
+
+        <section class="view" id="audit">
+          <div class="audit-grid">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">失败类型</p>
+                  <h2>失败模式</h2>
+                </div>
+              </div>
+              <div class="audit-cards" id="failureCards"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">人工复核</p>
+                  <h2>人工复核一致性</h2>
+                </div>
+              </div>
+              <div class="table compact" id="auditTable"></div>
+            </section>
+          </div>
+        </section>
+
+
+
+        <section class="view" id="history">
+          <div class="history-grid">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">评估记录</p>
+                  <h2>历史记录</h2>
+                </div>
+                <div class="history-tools">
+                  <span id="historyScope">未选择时分析全部</span>
+                  <button class="ghost" id="analyzeHistory">分析所选</button>
+                  <button class="ghost danger" id="deleteHistory" disabled>删除所选</button>
+                  <button class="ghost" id="reloadHistory">刷新</button>
+                </div>
+              </div>
+              <div class="history-list" id="historyList"></div>
+            </section>
+            <section class="panel detail-panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">记录详情</p>
+                  <h2 id="recordTitle">评估详情</h2>
+                </div>
+                <div class="header-actions">
+                  <button class="ghost" id="downloadRecordTest">下载测试</button>
+                  <button class="primary" id="downloadRecordPdf">下载 PDF</button>
+                </div>
+              </div>
+              <div class="record-detail" id="recordDetail"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="report">
+          <div class="reportcharts">
+            <section class="panel chart-panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">质量对比</p>
+                  <h2>函数质量分</h2>
+                </div>
+                <span class="pill" id="analysisScope">全部记录</span>
+              </div>
+              <canvas id="scoreCanvas" width="720" height="300" aria-label="函数质量柱状图"></canvas>
+            </section>
+            <section class="panel gate-panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">综合判定</p>
+                  <h2>质量门概览</h2>
+                </div>
+                <span class="pill" id="gateState">待评估</span>
+              </div>
+              <div class="gate-metrics" id="gateMetrics"></div>
+            </section>
+            <section class="panel chart-panel profile-panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">多维证据</p>
+                  <h2>质量证据对比</h2>
+                </div>
+              </div>
+              <canvas id="evidenceCanvas" width="1200" height="360" aria-label="函数质量证据对比图"></canvas>
+            </section>
+          </div>
+          <section class="panel report-output">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">汇总输出</p>
+                <h2>整体评估报告</h2>
+              </div>
+              <div class="header-actions"><button class="ghost" id="downloadPdf">下载 PDF</button><button class="primary" id="refreshReport">生成报告</button></div>
+            </div>
+            <textarea id="reportText" class="report-text" spellcheck="false"></textarea>
+          </section>
+        </section>
+        <section class="view" id="users">
+          <div class="users-grid">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">账号管理</p>
+                  <h2>用户列表</h2>
+                </div>
+                <button class="ghost" id="reloadUsers">刷新用户</button>
+              </div>
+              <div class="users-list" id="usersList"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">权限配置</p>
+                  <h2>账号编辑</h2>
+                </div>
+              </div>
+              <form class="user-form" id="userForm">
+                <label>账号<input id="editUser" type="text" placeholder="newuser" autocomplete="off"></label>
+                <label>密码<input id="editPassword" type="password" placeholder="新建或重置时填写" autocomplete="new-password"></label>
+                <label>角色<select id="editRole"><option>开发者</option><option>测试工程师</option><option>管理员</option></select></label>
+                <div class="actionbar"><button class="ghost" type="button" id="deleteUser">删除账号</button><button class="primary" type="submit">保存账号</button></div>
+              </form>
+            </section>
+          </div>
+        </section>
+
+      </main>
+    </div>
+    <script src="./app.js?v=20260731c"></script>
+  </body>
+</html>
